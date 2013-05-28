@@ -14,26 +14,26 @@
 
 #pragma mark -
 #pragma mark UIView boilerplate
-- (void)viewDidLoad 
+- (void)viewDidLoad
 {
 	[self setupPage];
     [super viewDidLoad];
 }
 
 
-- (void)didReceiveMemoryWarning 
+- (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload 
+- (void)viewDidUnload
 {
 	[scrollView release];
 	[pageControl release];
 }
 
 
-- (void)dealloc 
+- (void)dealloc
 {
     [super dealloc];
 }
@@ -43,7 +43,7 @@
 - (void)setupPage
 {
 	scrollView.delegate = self;
-
+    
 	[self.scrollView setBackgroundColor:[UIColor blackColor]];
 	[scrollView setCanCancelContentTouches:NO];
 	
@@ -52,32 +52,52 @@
 	scrollView.scrollEnabled = YES;
 	scrollView.pagingEnabled = YES;
 	
-	NSUInteger nimages = 0;
-	CGFloat cx = 0;
-	for (; ; nimages++) {
-		NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
-		UIImage *image = [UIImage imageNamed:imageName];
-		if (image == nil) {
-			break;
-		}
-		UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-		
-		CGRect rect = imageView.frame;
-		rect.size.height = image.size.height;
-		rect.size.width = image.size.width;
-		rect.origin.x = ((scrollView.frame.size.width - image.size.width) / 2) + cx;
-		rect.origin.y = ((scrollView.frame.size.height - image.size.height) / 2);
-
-		imageView.frame = rect;
-
-		[scrollView addSubview:imageView];
-		[imageView release];
-
-		cx += scrollView.frame.size.width;
+    NSArray *colorArray = [NSArray arrayWithObjects:[UIColor blueColor],[UIColor grayColor],[UIColor orangeColor],[UIColor magentaColor],[UIColor yellowColor], nil];
+    
+    int x = 10;
+  	for (int i = 0; i < 5 ; i++) {
+        //		NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
+        //		UIImage *image = [UIImage imageNamed:imageName];
+        //		if (image == nil) {
+        //			break;
+        //		}
+        //		UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        //
+        //		CGRect rect = imageView.frame;
+        //		rect.size.height = image.size.height;
+        //		rect.size.width = image.size.width;
+        //		rect.origin.x = ((scrollView.frame.size.width - image.size.width) / 2) + cx;
+        //		rect.origin.y = ((scrollView.frame.size.height - image.size.height) / 2);
+        //
+        //		imageView.frame = rect;
+        
+        
+        UIScrollView *tempView  = [[UIScrollView alloc] initWithFrame:CGRectMake(x, 10, 300, 1000)];
+        [tempView setContentSize:CGSizeMake(300, 1000)];
+        tempView.backgroundColor = [colorArray objectAtIndex:i];
+        
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 100, 20)];
+        label1.textColor = [UIColor blackColor];
+        [tempView addSubview:label1];
+        
+        UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(30, 600, 100, 20)];
+        label2.textColor = [UIColor blackColor];
+        [tempView addSubview:label2];
+        
+        
+        [scrollView addSubview:tempView];
+        
+        x= tempView.frame.size.width + 30 +x;
+		//cx += scrollView.frame.size.width;
 	}
 	
-	self.pageControl.numberOfPages = nimages;
-	[scrollView setContentSize:CGSizeMake(cx, [scrollView bounds].size.height)];
+	self.pageControl.numberOfPages = 5;
+    scrollView.showsVerticalScrollIndicator = YES;
+    scrollView.showsHorizontalScrollIndicator = YES;
+    
+    
+    
+	[scrollView setContentSize:CGSizeMake(320*5, 1000)];
 }
 
 #pragma mark -
@@ -87,7 +107,7 @@
     if (pageControlIsChangingPage) {
         return;
     }
-
+    
 	/*
 	 *	We switch page at 50% across
 	 */
@@ -96,14 +116,14 @@
     pageControl.currentPage = page;
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)_scrollView 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)_scrollView
 {
     pageControlIsChangingPage = NO;
 }
 
 #pragma mark -
 #pragma mark PageControl stuff
-- (IBAction)changePage:(id)sender 
+- (IBAction)changePage:(id)sender
 {
 	/*
 	 *	Change the scroll view
@@ -113,7 +133,7 @@
     frame.origin.y = 0;
 	
     [scrollView scrollRectToVisible:frame animated:YES];
-
+    
 	/*
 	 *	When the animated scrolling finishings, scrollViewDidEndDecelerating will turn this off
 	 */

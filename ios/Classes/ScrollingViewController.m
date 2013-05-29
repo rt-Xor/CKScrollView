@@ -20,7 +20,6 @@
     [super viewDidLoad];
 }
 
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -31,7 +30,6 @@
 	[scrollView release];
 	[pageControl release];
 }
-
 
 - (void)dealloc
 {

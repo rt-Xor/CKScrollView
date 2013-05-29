@@ -72,11 +72,12 @@
         //		imageView.frame = rect;
         
         
-        UIScrollView *tempView  = [[UIScrollView alloc] initWithFrame:CGRectMake(x, 10, 300, 1000)];
+        UIScrollView *tempView  = [[UIScrollView alloc] initWithFrame:CGRectMake(x, 40, 300,450)];
         [tempView setContentSize:CGSizeMake(300, 1000)];
+        tempView.bounces = NO;
         tempView.backgroundColor = [colorArray objectAtIndex:i];
         
-        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 100, 20)];
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(30, 70, 100, 20)];
         label1.textColor = [UIColor blackColor];
         [tempView addSubview:label1];
         
@@ -84,7 +85,7 @@
         label2.textColor = [UIColor blackColor];
         [tempView addSubview:label2];
         
-        
+        scrollView.backgroundColor = [UIColor yellowColor];
         [scrollView addSubview:tempView];
         
         x= tempView.frame.size.width + 30 +x;
@@ -94,14 +95,28 @@
 	self.pageControl.numberOfPages = 5;
     scrollView.showsVerticalScrollIndicator = YES;
     scrollView.showsHorizontalScrollIndicator = YES;
+    scrollView.delaysContentTouches = NO;
     
-    
-    
-	[scrollView setContentSize:CGSizeMake(320*5, 1000)];
+	[scrollView setContentSize:CGSizeMake(320*5, scrollView.frame.size.height)];
 }
+
+
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate stuff
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)_scrollView{
+    
+    if (_scrollView == scrollView) {
+        NSLog(@"inside scrollView");
+    }
+    else {
+    
+        NSLog(@"outside scrollview");
+    }
+
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)_scrollView
 {
     if (pageControlIsChangingPage) {
